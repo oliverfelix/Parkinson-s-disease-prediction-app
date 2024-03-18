@@ -6,9 +6,9 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 __version__ = "0.0.0"
 
-REPO_NAME = "End-to-End-ML-project"
+REPO_NAME = "Parkinson-s-disease-prediction-app"
 AUTHOR_USER_NAME = "oliverfelix"
-SRC_REPO = "mlProject"
+SRC_REPO = "Parkinson's"
 AUTHOR_EMAIL = "jayandhans484@gmail.com"
 
 
