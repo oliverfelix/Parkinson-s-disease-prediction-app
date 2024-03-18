@@ -1,0 +1,28 @@
+columns:
+  name: Object
+  MDVP:Fo(Hz): Float64
+  MDVP:Fhi(Hz): Float64
+  MDVP:Flo(Hz): Float64
+  MDVP:Jitter(%): Float64
+  MDVP:Jitter(Abs): Float64
+  MDVP:RAP: Float64
+  MDVP:PPQ: Float64
+  Jitter:DDP: Float64
+  MDVP:Shimmer: Float64
+  MDVP:Shimmer(dB): Float64
+  Shimmer:APQ3: Float64
+  Shimmer:APQ5: Float64
+  MDVP:APQ: Float64
+  Shimmer:DDA: Float64
+  NHR: Float64
+  HNR: Float64
+  status: int64
+  RPDE: Float64
+  DFA: Float64
+  spread1: Float64
+  spread2: Float64
+  D2: Float64
+  PPE: Float64
+
+TARGET_COLUMN:
+  name: status
