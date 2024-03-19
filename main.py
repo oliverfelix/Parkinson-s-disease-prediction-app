@@ -1,4 +1,5 @@
 from Parkinson.pipeline.stage_03_data_transformation import DataTransformationTrainingPipeline
+from Parkinson.pipeline.stage_04_model_trainer import ModelTrainerTrainingPipeline
 from loggingg import logging
 from src.Parkinson.pipeline.stage_01_data_ingestion import DataIngestionTrainingPipeline
 from src.Parkinson.pipeline.stage_02_data_validation import DataValidationTrainingPipeline
@@ -38,3 +39,14 @@ try:
 except Exception as e:
         logging.exception(e)
         raise e
+    
+    
+STAGE_NAME = "Model Trainer stage"
+try:
+    logging.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
+    obj = ModelTrainerTrainingPipeline()
+    obj.main()
+    logging.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
+except Exception as e:
+    logging.exception(e)
+    raise e
