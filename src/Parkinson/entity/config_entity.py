@@ -31,3 +31,12 @@ class ModelTrainerConfig:
     test_data_path: Path
     model_name: str
     target_column: str
+    
+
+@dataclass(frozen=True)
+class ModelEvaluationConfig:
+    root_dir: Path
+    test_data_path: Path
+    model_path: Path
+    metric_file_name: Path
+    target_column: str
