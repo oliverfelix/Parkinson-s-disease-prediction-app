@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parkinson's Disease Prediction Form</title>
+    <link rel="stylesheet" href="static/css2/style.css" />
+  </head>
+  <body class="form-v9">
+    <div class="page-content">
+      <div class="form-v9-content">
+        <form class="form-detail" action="/predict" method="post">
+          <h2>Please Fill The Information</h2>
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="MDVP_Fo">MDVP Fo (Hz):</label>
+              <input
+                type="text"
+                name="MDVP_Fo"
+                id="MDVP_Fo"
+                class="input-text"
+                placeholder="MDVP Fo (Hz)"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="MDVP_Fhi">MDVP Fhi (Hz):</label>
+              <input
+                type="text"
+                name="MDVP_Fhi"
+                id="MDVP_Fhi"
+                class="input-text"
+                placeholder="MDVP Fhi (Hz)"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="MDVP_Flo">MDVP Flo (Hz):</label>
+              <input
+                type="text"
+                name="MDVP_Flo"
+                id="MDVP_Flo"
+                class="input-text"
+                placeholder="MDVP Flo (Hz)"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="MDVP_Jitter">MDVP Jitter (%):</label>
+              <input
+                type="text"
+                name="MDVP_Jitter"
+                id="MDVP_Jitter"
+                class="input-text"
+                placeholder="MDVP Jitter (%)"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="MDVP_Jitter_Abs">MDVP Jitter Abs:</label>
+              <input
+                type="text"
+                name="MDVP_Jitter_Abs"
+                id="MDVP_Jitter_Abs"
+                class="input-text"
+                placeholder="MDVP Jitter Abs"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="MDVP_RAP">MDVP RAP:</label>
+              <input
+                type="text"
+                name="MDVP_RAP"
+                id="MDVP_RAP"
+                class="input-text"
+                placeholder="MDVP RAP"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="MDVP_PPQ">MDVP PPQ:</label>
+              <input
+                type="text"
+                name="MDVP_PPQ"
+                id="MDVP_PPQ"
+                class="input-text"
+                placeholder="MDVP PPQ"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="Jitter_DDP">Jitter DDP:</label>
+              <input
+                type="text"
+                name="Jitter_DDP"
+                id="Jitter_DDP"
+                class="input-text"
+                placeholder="Jitter DDP"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="MDVP_Shimmer">MDVP Shimmer:</label>
+              <input
+                type="text"
+                name="MDVP_Shimmer"
+                id="MDVP_Shimmer"
+                class="input-text"
+                placeholder="MDVP Shimmer"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="MDVP_Shimmer_dB">MDVP Shimmer dB:</label>
+              <input
+                type="text"
+                name="MDVP_Shimmer_dB"
+                id="MDVP_Shimmer_dB"
+                class="input-text"
+                placeholder="MDVP Shimmer dB"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="Shimmer_APQ3">Shimmer APQ3:</label>
+              <input
+                type="text"
+                name="Shimmer_APQ3"
+                id="Shimmer_APQ3"
+                class="input-text"
+                placeholder="Shimmer APQ3"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="Shimmer_APQ5">Shimmer APQ5:</label>
+              <input
+                type="text"
+                name="Shimmer_APQ5"
+                id="Shimmer_APQ5"
+                class="input-text"
+                placeholder="Shimmer APQ5"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="MDVP_APQ">MDVP APQ:</label>
+              <input
+                type="text"
+                name="MDVP_APQ"
+                id="MDVP_APQ"
+                class="input-text"
+                placeholder="MDVP APQ"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="Shimmer_DDA">Shimmer DDA:</label>
+              <input
+                type="text"
+                name="Shimmer_DDA"
+                id="Shimmer_DDA"
+                class="input-text"
+                placeholder="Shimmer DDA"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="NHR">NHR:</label>
+              <input
+                type="text"
+                name="NHR"
+                id="NHR"
+                class="input-text"
+                placeholder="NHR"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="HNR">HNR:</label>
+              <input
+                type="text"
+                name="HNR"
+                id="HNR"
+                class="input-text"
+                placeholder="HNR"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="RPDE">RPDE:</label>
+              <input
+                type="text"
+                name="RPDE"
+                id="RPDE"
+                class="input-text"
+                placeholder="RPDE"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="DFA">DFA:</label>
+              <input
+                type="text"
+                name="DFA"
+                id="DFA"
+                class="input-text"
+                placeholder="DFA"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="spread1">Spread1:</label>
+              <input
+                type="text"
+                name="spread1"
+                id="spread1"
+                class="input-text"
+                placeholder="Spread1"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="spread2">Spread2:</label>
+              <input
+                type="text"
+                name="spread2"
+                id="spread2"
+                class="input-text"
+                placeholder="Spread2"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row-total">
+            <div class="form-row">
+              <label for="D2">D2:</label>
+              <input
+                type="text"
+                name="D2"
+                id="D2"
+                class="input-text"
+                placeholder="D2"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <label for="PPE">PPE:</label>
+              <input
+                type="text"
+                name="PPE"
+                id="PPE"
+                class="input-text"
+                placeholder="PPE"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row-last">
+            <input
+              type="submit"
+              name="predict"
+              class="predict"
+              value="Predict"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

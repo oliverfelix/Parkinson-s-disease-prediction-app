@@ -1,30 +1,44 @@
-import os
 import sys
-from flask import Flask, render_template, request
-import numpy as np
-import pandas as pd
-from Parkinson.pipeline.prediction import PredictionPipeline
+from flask import Flask, render_template, redirect, request, url_for
 import logging
+import numpy as np
+from Parkinson.pipeline.prediction import PredictionPipeline
 from exception import customexception
-
-
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)  # Set the logging level to DEBUG
-logger = logging.getLogger(__name__)  # Create a logger for the current module
 
 app = Flask(__name__)
 
+# Route for home page
 @app.route('/', methods=['GET'])
-def homepage():
-    return render_template("index.html")
+def home():
+    return render_template('index.html')
 
-@app.route('/train', methods=['GET'])
-def training():
-    os.system("python main.py")
-    return "Training Successful"
+# Route for Bar Chart
+@app.route('/bar_chart', methods=['GET'])
+def bar_chart():
+    # Logic for Bar Chart
+    return "Bar Chart Page"
 
-@app.route('/predict', methods=['POST', 'GET'])
-def index():
+# Route for Line Chart
+@app.route('/line_chart', methods=['GET'])
+def line_chart():
+    # Logic for Line Chart
+    return "Line Chart Page"
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # If the form is submitted, redirect to the prediction page
+        return redirect(url_for('prediction'))
+    else:
+        # Render the login page
+        return render_template('login.html')
+
+@app.route('/prediction', methods=['GET', 'POST'])
+def prediction():
     if request.method == 'POST':
         try:
             # Reading the inputs given by the user
@@ -73,7 +87,15 @@ def index():
             return 'Something went wrong. Check the logs for details.'
 
     else:
-        return render_template('index.html')
+        # Render the prediction page
+        return render_template('prediction.html')
+
+
+# Route for Illness Ratio
+@app.route('/illness_ratio', methods=['GET'])
+def illness_ratio():
+    # Logic for Illness Ratio
+    return "Illness Ratio Page"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

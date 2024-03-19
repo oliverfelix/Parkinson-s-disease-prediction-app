@@ -1,0 +1,35 @@
+/* CSS styles */
+.button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+/* Button hover effect */
+.button:hover {
+  background-color: #45a049;
+}
+
+/* Positioning for login/register buttons */
+.login-register {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Additional CSS styles */
+body {
+  background-image: url("/static/images/pexels-eberhard-grossgasteiger-1064162.jpg");
+  background-size: cover;
+  background-position: center;
+  font-family: Arial, sans-serif;
+  color: white; /* Text color */
+}
