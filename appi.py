@@ -1,12 +1,9 @@
 import sys
 from loggingg import logging
 from flask import Flask, render_template, redirect, request, session, url_for
-from uuid import uuid4
-
-import numpy as np
-
-from Parkinson.pipeline.prediction import PredictionPipeline
 from exception import customexception  # Import for generating unique session IDs
+import numpy as np
+from Parkinson.pipeline.prediction import PredictionPipeline
 
 app = Flask(__name__)
 
@@ -55,13 +52,14 @@ def login():
 @app.route('/input')
 def input():
     username = session.get('username')
-    return render_template('input.html',username=username)
+    return render_template('input.html', username=username)
 
 
 @app.route('/logout')
 def logout():
    session.pop('username', None)
    return redirect(url_for('index'))
+
 
 @app.route('/prediction', methods=['GET', 'POST'])
 def prediction():
@@ -109,12 +107,9 @@ def prediction():
         except Exception as e:
             # Log any exceptions
             logging.error(f'The Exception message is: {e}')
-            raise customexception(e,sys)
-            return 'Something went wrong. Check the logs for details.'
-
-    else:
-        # Render the prediction page
-        return render_template('prediction.html')
+            raise customexception(e, sys)
+    # If the request method is not POST, render the prediction page
+    return render_template('prediction.html')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
