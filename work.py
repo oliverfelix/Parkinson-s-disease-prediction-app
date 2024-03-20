@@ -1,6 +1,5 @@
 import logging
 from flask import Flask, render_template, redirect, request, session, url_for
- # Import for generating unique session IDs
 import numpy as np
 from Parkinson.pipeline.prediction import PredictionPipeline
 
@@ -17,51 +16,27 @@ user_sessions = {}
 registered_users = {}
 
 
-@app.route('/', methods=['GET'])
+@app.route('/prediction', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('prediction.html')
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/results')
+def results():
+    # Fetch prediction result from session
+    prediction_result = session.get('prediction_result')
+    return render_template('results.html', prediction=prediction_result)
+
+
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username not in registered_users:
-            # Store the username and password in the dictionary
-            registered_users[username] = password
-            return redirect(url_for('login'))
-        else:
-            return 'Username already exists. Please choose a different username.'
-    return render_template('register.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        session['username'] = username
-        if username in registered_users and registered_users[username] == password:
-            # If login is successful, redirect to input page
-            return redirect(url_for('input'))
-        else:
-            return 'Invalid username or password. Please try again.'
-    return render_template('login.html')
-
-
-@app.route('/input')
-def input():
-    username = session.get('username')
-    return render_template('input.html', username=username)
-
-
-@app.route('/logout')
-def logout():
-   session.pop('username', None)
-   return redirect(url_for('index'))
-
-
+        return redirect(url_for('results'))
+    else:
+        return redirect(url_for('results'))
+    
+    
 @app.route('/prediction', methods=['GET', 'POST'])
 def prediction():
     if request.method == 'POST':
@@ -99,11 +74,18 @@ def prediction():
             
             obj = PredictionPipeline()
             predict = obj.predict(data)
+            print(str(predict))
 
-            # Log prediction result
-            logging.info(f"Prediction successful. Result: {predict}")
+             # Log prediction result
+            # logging.info(f"Prediction successful. Result: {predict}")
 
-            return render_template('results.html', prediction=str(predict))
+            # return render_template('results.html', prediction=str(predict))
+            
+            
+            # Store prediction result in session
+            session['prediction_result'] = predict
+
+            return redirect(url_for('results'))
 
         except Exception as e:
             # Log any exceptions

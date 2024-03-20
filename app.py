@@ -1,118 +1,82 @@
-import sys
-from flask import Flask, render_template, redirect, request, url_for,session
 import logging
+from flask import Flask, render_template, redirect, request, session, url_for
 import numpy as np
 from Parkinson.pipeline.prediction import PredictionPipeline
-from exception import customexception
 
 app = Flask(__name__)
 
+logging.basicConfig(level=logging.DEBUG) 
 
-# Secret key for session management
+# Secret key for session signing (replace with a strong secret)
 app.secret_key = 'your_secret_key'
 
-# Dictionary to store registered users' information
-# Dictionary to store registered users' details
-registered_users = {
-    'user1': {'password': 'password1', 'fullname': 'User One'},
-    'user2': {'password': 'password2', 'fullname': 'User Two'}
-}
-# Route for home page
+# Dictionary to store user sessions
+user_sessions = {}
 
-@app.route('/', methods=['GET'])
-def home():
-    return render_template('index.html')
-
-# Route for Bar Chart
-@app.route('/bar_chart', methods=['GET'])
-def bar_chart():
-    # Logic for Bar Chart
-    return "Bar Chart Page"
-
-# Route for Line Chart
-@app.route('/line_chart', methods=['GET'])
-def line_chart():
-    # Logic for Line Chart
-    return "Line Chart Page"
+registered_users = {}
 
 
-
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     error = None
-#     if request.method == 'POST':
-#         # Check if the form submission is for login or register
-#         if 'login' in request.form:
-#             # Attempt login
-#             username = request.form['username']
-#             password = request.form['password']
-#             if username in registered_users and registered_users[username]['password'] == password:
-#                 session['username'] = username
-#                 return redirect(url_for('input'))  # Redirect to input.html after successful login
-#             else:
-#                 error = 'Invalid username or password'
-#         elif 'register' in request.form:
-#             # Register new user
-#             username = request.form['username']
-#             password = request.form['password']
-#             fullname = request.form['fullname']
-#             if username in registered_users:
-#                 error = 'Username already exists. Please choose a different username.'
-#             else:
-#                 registered_users[username] = {'password': password, 'fullname': fullname}
-#                 return redirect(url_for('index'))  # Redirect to index.html after successful registration
-#     return render_template('index.html', error=error)
-
-# @app.route('/input')
-# def input():
-#     # Render the input form for prediction
-#     username = session.get('username')
-#     if username:
-#         return render_template('input.html', username=username)
-#     else:
-#         return redirect(url_for('index'))
-    
-    
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        # Check if username exists and password is correct
-        if username in registered_users and registered_users[username]['password'] == password:
-            # Redirect to input page if login is successful
-            return redirect(url_for('input'))
-        else:
-            # Render login page with error message
-            return render_template('login.html', error='Wrong username or password. Please try again.')
-    # Render login page for GET requests
-    return render_template('login.html', error=None)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        fullname = request.form['fullname']
-        # Check if username already exists
-        if username in registered_users:
-            # Render register page with error message
-            return render_template('register.html', error='Username already exists. Please choose a different username.')
+        if username not in registered_users:
+            # Store the username and password in the dictionary
+            registered_users[username] = password
+            return redirect(url_for('login'))
         else:
-            # Add new user to registered_users dictionary
-            registered_users[username] = {'password': password, 'fullname': fullname}
-            # Redirect to home page after successful registration
-            return redirect(url_for('index'))
-    # Render register page for GET requests
-    return render_template('register.html', error=None)
+            return 'Username already exists. Please choose a different username.'
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        session['username'] = username
+        if username in registered_users and registered_users[username] == password:
+            # If login is successful, redirect to input page
+            return redirect(url_for('input'))
+        else:
+            return 'Invalid username or password. Please try again.'
+    return render_template('login.html')
+
 
 @app.route('/input')
 def input():
-    return render_template('input.html')
+    username = session.get('username')
+    return render_template('input.html', username=username)
 
+
+@app.route('/logout')
+def logout():
+   session.pop('username', None)
+   return redirect(url_for('index'))
+
+
+@app.route('/results')
+def results():
+    # Fetch prediction result from session
+    prediction_result = session.get('prediction_result')
+    
+    print("Prediction Result:", prediction_result) 
+    return render_template('results.html', prediction=prediction_result)
+
+
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    
+    if request.method == 'POST':
+        return redirect(url_for('results'))
+    else:
+        return redirect(url_for('results'))
 
 
 @app.route('/prediction', methods=['GET', 'POST'])
@@ -152,29 +116,25 @@ def prediction():
             
             obj = PredictionPipeline()
             predict = obj.predict(data)
+            print(str(predict))
 
-            # Log prediction result
-            logging.info(f"Prediction successful. Result: {predict}")
+             # Log prediction result
+            # logging.info(f"Prediction successful. Result: {predict}")
 
-            return render_template('results.html', prediction=str(predict))
+            # return render_template('results.html', prediction=str(predict))
+            
+            
+            # Store prediction result in session
+            session['prediction_result'] = predict
+
+            return redirect(url_for('results'))
 
         except Exception as e:
             # Log any exceptions
             logging.error(f'The Exception message is: {e}')
-            raise customexception(e,sys)
-            return 'Something went wrong. Check the logs for details.'
+            raise e
+    # If the request method is not POST, render the prediction page
+    return render_template('prediction.html')
 
-    else:
-        # Render the prediction page
-        return render_template('prediction.html')
-
-
-# Route for Illness Ratio
-@app.route('/illness_ratio', methods=['GET'])
-def illness_ratio():
-    # Logic for Illness Ratio
-    return "Illness Ratio Page"
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
-    print("Flask application running at http://127.0.0.1:8080")
