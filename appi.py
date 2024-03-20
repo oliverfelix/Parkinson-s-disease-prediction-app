@@ -1,11 +1,12 @@
-import sys
-from loggingg import logging
+import logging
 from flask import Flask, render_template, redirect, request, session, url_for
-from exception import customexception  # Import for generating unique session IDs
+ # Import for generating unique session IDs
 import numpy as np
 from Parkinson.pipeline.prediction import PredictionPipeline
 
 app = Flask(__name__)
+
+logging.basicConfig(level=logging.DEBUG) 
 
 # Secret key for session signing (replace with a strong secret)
 app.secret_key = 'your_secret_key'
@@ -16,7 +17,7 @@ user_sessions = {}
 registered_users = {}
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
@@ -107,7 +108,7 @@ def prediction():
         except Exception as e:
             # Log any exceptions
             logging.error(f'The Exception message is: {e}')
-            raise customexception(e, sys)
+            raise e
     # If the request method is not POST, render the prediction page
     return render_template('prediction.html')
 
