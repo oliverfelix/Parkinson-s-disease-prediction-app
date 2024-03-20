@@ -1,123 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-      }
-      .container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        text-align: center;
-        color: #333;
-      }
-      label {
-        display: block;
-        margin-bottom: 5px;
-        color: #555;
-      }
-      input[type="text"],
-      input[type="email"],
-      input[type="password"],
-      select,
-      textarea {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        font-size: 16px;
-      }
-      select {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-        background-repeat: no-repeat;
-        background-position: right 10px top 50%;
-        background-size: 24px;
-      }
-      textarea {
-        height: 100px;
-      }
-      input[type="submit"] {
-        background-color: #4caf50;
-        color: #fff;
-        border: none;
-        padding: 15px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-      input[type="submit"]:hover {
-        background-color: #45a049;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <h1>Register</h1>
-      <form id="registrationForm" action="/register" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
+        <h1>Register</h1>
+        <form action="/register" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
 
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required />
-
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" required />
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" required></textarea>
-
-        <label for="mobile">Mobile Number:</label>
-        <input type="text" id="mobile" name="mobile" required />
-
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required />
-
-        <input type="submit" value="Register" />
-      </form>
+            <input type="submit" value="Register" />
+        </form>
     </div>
-
-    <script>
-      // Add event listener to registration form submission
-      document
-        .getElementById("registrationForm")
-        .addEventListener("submit", function (event) {
-          // Prevent default form submission
-          event.preventDefault();
-
-          // Show registration successful message
-          alert("Registration Successful!");
-
-          // Redirect back to the index page
-          window.location.href = "/";
-        });
-    </script>
-  </body>
+</body>
 </html>

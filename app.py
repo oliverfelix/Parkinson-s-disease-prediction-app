@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for,session
 import logging
 import numpy as np
 from Parkinson.pipeline.prediction import PredictionPipeline
@@ -7,7 +7,18 @@ from exception import customexception
 
 app = Flask(__name__)
 
+
+# Secret key for session management
+app.secret_key = 'your_secret_key'
+
+# Dictionary to store registered users' information
+# Dictionary to store registered users' details
+registered_users = {
+    'user1': {'password': 'password1', 'fullname': 'User One'},
+    'user2': {'password': 'password2', 'fullname': 'User Two'}
+}
 # Route for home page
+
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
@@ -24,18 +35,85 @@ def line_chart():
     # Logic for Line Chart
     return "Line Chart Page"
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
 
+
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     error = None
+#     if request.method == 'POST':
+#         # Check if the form submission is for login or register
+#         if 'login' in request.form:
+#             # Attempt login
+#             username = request.form['username']
+#             password = request.form['password']
+#             if username in registered_users and registered_users[username]['password'] == password:
+#                 session['username'] = username
+#                 return redirect(url_for('input'))  # Redirect to input.html after successful login
+#             else:
+#                 error = 'Invalid username or password'
+#         elif 'register' in request.form:
+#             # Register new user
+#             username = request.form['username']
+#             password = request.form['password']
+#             fullname = request.form['fullname']
+#             if username in registered_users:
+#                 error = 'Username already exists. Please choose a different username.'
+#             else:
+#                 registered_users[username] = {'password': password, 'fullname': fullname}
+#                 return redirect(url_for('index'))  # Redirect to index.html after successful registration
+#     return render_template('index.html', error=error)
+
+# @app.route('/input')
+# def input():
+#     # Render the input form for prediction
+#     username = session.get('username')
+#     if username:
+#         return render_template('input.html', username=username)
+#     else:
+#         return redirect(url_for('index'))
+    
+    
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # If the form is submitted, redirect to the prediction page
-        return redirect(url_for('prediction'))
-    else:
-        # Render the login page
-        return render_template('login.html')
+        username = request.form['username']
+        password = request.form['password']
+        # Check if username exists and password is correct
+        if username in registered_users and registered_users[username]['password'] == password:
+            # Redirect to input page if login is successful
+            return redirect(url_for('input'))
+        else:
+            # Render login page with error message
+            return render_template('login.html', error='Wrong username or password. Please try again.')
+    # Render login page for GET requests
+    return render_template('login.html', error=None)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        fullname = request.form['fullname']
+        # Check if username already exists
+        if username in registered_users:
+            # Render register page with error message
+            return render_template('register.html', error='Username already exists. Please choose a different username.')
+        else:
+            # Add new user to registered_users dictionary
+            registered_users[username] = {'password': password, 'fullname': fullname}
+            # Redirect to home page after successful registration
+            return redirect(url_for('index'))
+    # Render register page for GET requests
+    return render_template('register.html', error=None)
+
+@app.route('/input')
+def input():
+    return render_template('input.html')
+
+
 
 @app.route('/prediction', methods=['GET', 'POST'])
 def prediction():

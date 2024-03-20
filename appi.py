@@ -1,41 +1,67 @@
-import logging
+import sys
+from loggingg import logging
 from flask import Flask, render_template, redirect, request, session, url_for
+from uuid import uuid4
+
+import numpy as np
 
 from Parkinson.pipeline.prediction import PredictionPipeline
-from exception import customexception
+from exception import customexception  # Import for generating unique session IDs
 
 app = Flask(__name__)
+
+# Secret key for session signing (replace with a strong secret)
 app.secret_key = 'your_secret_key'
 
-# Define a route for login
+# Dictionary to store user sessions
+user_sessions = {}
+
+registered_users = {}
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username not in registered_users:
+            # Store the username and password in the dictionary
+            registered_users[username] = password
+            return redirect(url_for('login'))
+        else:
+            return 'Username already exists. Please choose a different username.'
+    return render_template('register.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Assuming you have a function to validate the login credentials
         username = request.form['username']
         password = request.form['password']
-        # Check if the login is valid
-        if valid_login(username, password):
-            session['username'] = username  # Store the username in the session
-            return redirect(url_for('input'))  # Redirect to the input page
+        session['username'] = username
+        if username in registered_users and registered_users[username] == password:
+            # If login is successful, redirect to input page
+            return redirect(url_for('input'))
         else:
-            error = 'Invalid username or password'
-            return render_template('login.html', error=error)
+            return 'Invalid username or password. Please try again.'
     return render_template('login.html')
 
-# Define a route for logout
-@app.route('/logout')
-def logout():
-    session.pop('username', None)  # Remove the username from the session
-    return redirect(url_for('index'))  # Redirect to the index page
 
-# Define a route for the input page
 @app.route('/input')
 def input():
-    username = session.get('username')  # Retrieve the username from the session
-    return render_template('input.html', username=username)
+    username = session.get('username')
+    return render_template('input.html',username=username)
 
-# Other routes...
+
+@app.route('/logout')
+def logout():
+   session.pop('username', None)
+   return redirect(url_for('index'))
 
 @app.route('/prediction', methods=['GET', 'POST'])
 def prediction():
@@ -91,4 +117,4 @@ def prediction():
         return render_template('prediction.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)

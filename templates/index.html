@@ -3,121 +3,71 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parkinson's Disease Prediction</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    
-  </head>
+    <title>Login or Register</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <style>
-      /* Button styles */
-      .button {
-        background-color: #4caf50;
-        border: none;
-        color: white;
-        padding: 15px 32px;
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
         text-align: center;
-        text-decoration: none;
-        display: inline-block;
+      }
+      .container {
+        margin-top: 100px;
+      }
+      h1 {
+        margin-bottom: 30px;
+      }
+      .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+      .btn {
+        padding: 15px 30px;
         font-size: 16px;
-        margin: 4px 2px;
+        border: none;
+        border-radius: 25px;
         cursor: pointer;
-        border-radius: 10px;
+        transition: all 0.3s ease;
       }
-
-      /* Button hover effect */
-      .button:hover {
-        background-color: #45a049;
+      .login-btn {
+        background-color: #007bff;
+        color: #fff;
       }
-
-      /* Positioning for login/register buttons */
-      .login-register {
-        position: absolute;
-        top: 10px;
-        right: 10px;
+      .register-btn {
+        background-color: #28a745;
+        color: #fff;
       }
-
-      /* Table styles */
-        table {
-            width: 95%; /* Adjust the width to cover almost the full screen */
-            margin: auto; /* Center the table horizontally */
-            border-collapse: collapse;
-            border: 2px solid #4caf50;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #4caf50;
-            color: white;
-        }
+      .btn i {
+        margin-right: 10px;
+      }
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
     </style>
   </head>
   <body>
-    <!-- Login/Register buttons -->
-    <div class="login-register">
-      <button class="button" onclick="location.href='/login'">Login</button>
-      <button class="button" onclick="location.href='/register'">
-        Register
-      </button>
+    <div class="container">
+      <h1>Login or Register</h1>
+      <div class="btn-container">
+        <button
+          class="btn login-btn"
+          onclick="location.href='{{ url_for('login') }}'"
+        >
+          <i class="fas fa-sign-in-alt"></i>Login
+        </button>
+        <button
+          class="btn register-btn"
+          onclick="location.href='{{ url_for('register') }}'"
+        >
+          <i class="fas fa-user-plus"></i>Register
+        </button>
+      </div>
     </div>
-    <a href="/register">Register</a>
-    <h1>Parkinson's Disease Prediction</h1>
-    <p>Register if you are a new user and check your medical report.</p>
-    <!-- Add your content here -->
-
-    <!-- Buttons for other functionalities -->
-    <button class="button" onclick="location.href='/bar_chart'">
-      Bar Chart
-    </button>
-    <button class="button" onclick="location.href='/line_chart'">
-      Line Chart
-    </button>
-    <button class="button" onclick="location.href='/prediction'">
-      Prediction
-    </button>
-    <button class="button" onclick="location.href='/illness_ratio'">
-      Illness Ratio
-    </button>
-
-    <!-- Additional buttons -->
-    <button class="button" onclick="location.href='/download_data'">
-      Download Data
-    </button>
-    <button class="button" onclick="location.href='/all_users'">Logout</button>
-    <button class="button" onclick="location.href='/Logout'">All Users</button>
   </body>
-</html>
-
- <!-- Table for model names and accuracy -->
- <table>
-  <caption>Model Accuracy</caption>
-  <thead>
-      <tr>
-          <th>Topic Models</th>
-          <th>Accuracy</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Model 1</td>
-          <td>90%</td>
-      </tr>
-      <tr>
-          <td>Model 2</td>
-          <td>85%</td>
-      </tr>
-      <tr>
-          <td>Model 3</td>
-          <td>92%</td>
-      </tr>
-      <tr>
-          <td>Model 4</td>
-          <td>88%</td>
-      </tr>
-  </tbody>
-</table>
-</body>
 </html>
