@@ -7,13 +7,12 @@ from pathlib import Path
 
 class PredictionPipeline:
     def __init__(self):
-        self.model = joblib.load(Path('artifacts/model_trainer/model.joblib'))
+        model_path = Path('artifacts/model_trainer/model.joblib')
+        self.model = joblib.load(model_path)
 
-    
     def predict(self, data):
-        
-
+        print("Received data:", data)
         # Make predictions
         prediction = self.model.predict(data)
-
+        print("Prediction:", prediction)
         return prediction

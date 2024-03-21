@@ -41,9 +41,12 @@
             <div class="site-heading">
               <h1>Parkinson Disease Prediction</h1>
               <!-- Display prediction result here -->
-              <h2>{{ prediction }}</h2>
-              {% if session.get('prediction_result') is not none %}
-              <p>{{ session.get('prediction_result') }}</p>
+              <h2>Prediction Result: {{ prediction }}</h2>
+              {% if prediction is not none %}
+              <p>
+                {% if prediction == 1 %} Parkinson's Disease is predicted. {%
+                else %} Parkinson's Disease is not predicted. {% endif %}
+              </p>
               {% else %}
               <p>No prediction result available yet.</p>
               {% endif %}

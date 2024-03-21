@@ -1,5 +1,8 @@
+import base64
+from io import BytesIO
 import logging
 from flask import Flask, render_template, redirect, request, session, url_for
+from matplotlib import pyplot as plt
 import numpy as np
 from Parkinson.pipeline.prediction import PredictionPipeline
 
@@ -73,10 +76,53 @@ def results():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     
+    # Fetch prediction result from session
+    prediction_result = session.get('prediction_result')
+
     if request.method == 'POST':
         return redirect(url_for('results'))
     else:
         return redirect(url_for('results'))
+# Add a route for the bar chart page
+@app.route('/bar_chart')
+def bar_chart():
+    # Model accuracy data
+    models = ['LogisticRegression', 'xgboost', 'SVC', 'KNeighborsClassifier']
+    accuracies = [90.0, 96.67, 86.67, 83.33]
+
+    # Render the template with model accuracy data
+    return render_template('bar_chart.html', models=models, accuracies=accuracies)
+import pandas as pd
+from flask import send_file
+
+# Route for downloading user details and prediction result as Excel
+@app.route('/download_data')
+def download_data():
+    # Get the logged-in user's username from the session
+    username = session.get('username')
+    
+    # Fetch prediction result from session
+    prediction_result = session.get('prediction_result')
+    
+    # Create a DataFrame with user details and prediction result
+    user_data = pd.DataFrame({'Username': [username], 'Prediction Result': [prediction_result]})
+    
+    # Save DataFrame as Excel file
+    excel_filename = f'user_data_{username}.xlsx'
+    user_data.to_excel(excel_filename, index=False)
+    
+    # Send the Excel file to the user for download
+    return send_file(excel_filename, as_attachment=True)
+
+# Add a route for the line chart page
+@app.route('/line_chart')
+def line_chart():
+    # Model accuracy data
+    models = ['LogisticRegression', 'xgboost', 'SVC', 'KNeighborsClassifier']
+    accuracies = [90.0, 96.67, 86.67, 83.33]
+
+    # Render the template with model accuracy data
+    return render_template('line_chart.html', models=models, accuracies=accuracies)
 
 
 @app.route('/prediction', methods=['GET', 'POST'])
@@ -112,22 +158,24 @@ def prediction():
                     MDVP_RAP, MDVP_PPQ, Jitter_DDP, MDVP_Shimmer, MDVP_Shimmer_dB,
                     Shimmer_APQ3, Shimmer_APQ5, MDVP_APQ, Shimmer_DDA, NHR,
                     HNR, RPDE, DFA, spread1, spread2, D2, PPE]
-            data = np.array(data).reshape(1, 22)  # Reshape to a 2D array
+            data = np.array(data).reshape(1,22) # Reshape to a 2D array
             
             obj = PredictionPipeline()
-            predict = obj.predict(data)
-            print(str(predict))
-
-             # Log prediction result
-            # logging.info(f"Prediction successful. Result: {predict}")
-
-            # return render_template('results.html', prediction=str(predict))
             
-            
+            predicted_value = obj.predict(data)
+            print(predicted_value)
+            logging.info(f"Prediction successful. Result: {predicted_value}")
             # Store prediction result in session
             session['prediction_result'] = predict
 
-            return redirect(url_for('results'))
+            return render_template('results.html', prediction=str(predicted_value))
+            # Log prediction result
+            
+            
+            # Store prediction result in session
+            # session['prediction_result'] = predict
+
+            # return redirect(url_for('results'))
 
         except Exception as e:
             # Log any exceptions
@@ -135,6 +183,28 @@ def prediction():
             raise e
     # If the request method is not POST, render the prediction page
     return render_template('prediction.html')
+@app.route('/illness_ratio', methods=['GET'])
+def illness_ratio():
+    # Example data: You should replace this with your actual data retrieval code
+    affected_users = 70
+    non_affected_users = 30
 
+    # Create pie chart
+    labels = ['Affected Users', 'Non-Affected Users']
+    sizes = [affected_users, non_affected_users]
+    colors = ['#ff9999', '#66b3ff']
+    plt.figure(figsize=(7, 5))
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+
+    # Save the plot to a bytes object
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+
+    # Encode the bytes object to base64 and render it in HTML
+    plot_url = base64.b64encode(img.getvalue()).decode()
+
+    return render_template('illness_ratio.html', plot_url=plot_url)
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
